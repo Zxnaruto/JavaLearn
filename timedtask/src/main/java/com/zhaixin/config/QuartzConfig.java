@@ -1,0 +1,70 @@
+package com.zhaixin.config;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import com.zhaixin.job.MyJob;
+import org.quartz.Scheduler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+
+import javax.sql.DataSource;
+
+/**
+ * @Program: timedtask
+ * @Classname: QuartzConfig
+ * @Author: Abner Zhai
+ * @Description:
+ * @Date: 2021/02/04 16:21
+ */
+@Configuration
+public class QuartzConfig {
+    @Autowired
+    @Qualifier("dataSource")
+    private DataSource druidDataSource;
+    // 创建job对象
+//    @Bean
+//    public JobDetailFactoryBean jobDetailFactoryBean() {
+//        //        factoryBean.setJobClass(MyJob.class);
+////        factoryBean.setDurability(true);
+////        factoryBean.setName("test job");
+////        factoryBean.setGroup("test job");
+////        factoryBean.setDescription("test job");
+//        return new JobDetailFactoryBean();
+//    }
+//
+//    // 创建Trigger对象
+//    @Bean
+//    public CronTriggerFactoryBean cronTriggerFactoryBean(JobDetailFactoryBean jobDetailFactoryBean) {
+//        CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
+//        factoryBean.setJobDetail(jobDetailFactoryBean.getObject());
+//        factoryBean.setCronExpression("0/2 * * * * ?");
+//        factoryBean.setDescription("test");
+//        factoryBean.setGroup("test");
+//        factoryBean.setName("test");
+//        return factoryBean;
+//    }
+
+    // 创建 schedulerFactoryBean对象
+    @Bean
+    public SchedulerFactoryBean schedulerFactoryBean(/*CronTriggerFactoryBean cronTriggerFactoryBean,*/ JobFactory jobFactory) {
+        SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
+        factoryBean.setConfigLocation(new ClassPathResource("/application.yml"));
+        //factoryBean.setTriggers(cronTriggerFactoryBean.getObject());
+        factoryBean.setJobFactory(jobFactory);
+        factoryBean.setDataSource(druidDataSource);
+
+        return factoryBean;
+    }
+
+    // 通过SchedulerFactoryBean获取scheduler对象
+    @Bean(name = "scheduler")
+    public Scheduler scheduler(SchedulerFactoryBean schedulerFactoryBean) {
+        return schedulerFactoryBean.getScheduler();
+    }
+}
+
