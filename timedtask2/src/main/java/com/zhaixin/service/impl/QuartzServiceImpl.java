@@ -53,7 +53,7 @@ public class QuartzServiceImpl implements QuartzService {
                 DateUtil.minute(time),
                 DateUtil.hour(time, true),
                 DateUtil.dayOfMonth(time),
-                DateUtil.month(time),
+                DateUtil.month(time) + 1,
                 DateUtil.year(time));
 
        return scheduleJob(jobBeanClass, corn, data);
