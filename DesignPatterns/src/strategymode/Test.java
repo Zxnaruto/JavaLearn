@@ -1,5 +1,6 @@
 package strategymode;
 
+
 /**
  * @Program: DesignPatterns
  * @Classname: Test
@@ -18,8 +19,12 @@ public class Test {
 //        MyStrategy division = new DivisionOperation();
 //        System.out.println(division.operation(4,2));
 
-        Context context = new Context(new AddOperation());
+        // 需要context来防止上面那样每次使用都要new
+        Context context = new Context();
+        context.setMyStrategy(new AddOperation());
         System.out.println(context.contextExec(2,1));
+        context.setMyStrategy(new SubtractOperation());
+        System.out.println(context.contextExec(4,2));
 
     }
 }
