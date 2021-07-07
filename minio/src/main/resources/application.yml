@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+minio:
+  # 服务地址
+  endpoint: http://localhost:9000
+  # 存储桶的名字
+  bucketName: zxtest
+  # key
+  accessKey: zxx
+  # 密钥
+  secretKey: 12345678
